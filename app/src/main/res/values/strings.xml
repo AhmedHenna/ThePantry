@@ -1,0 +1,84 @@
+<resources>
+    <string name="web_client_id">387219647843-ee43kbvecqk1miniunqo8ed01mgkc7s0.apps.googleusercontent.com</string>
+
+    <string-array name="categories">
+        <item>All</item>
+        <item>Vegetables</item>
+        <item>Fruit</item>
+        <item>Dairy</item>
+        <item>Meat</item>
+        <item>Condiments</item>
+        <item>Snacks</item>
+        <item>Grain</item>
+        <item>Drinks</item>
+    </string-array>
+
+    <string name="app_name">The Pantry</string>
+    <string name="email">Email</string>
+    <string name="log_in">Log in</string>
+    <string name="password">Password</string>
+    <string name="don_t_have_an_account_sign_up"><u>Don’t have an account? Sign up</u></string>
+    <string name="or">Or</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="facebook_logo">Facebook Logo</string>
+    <string name="google_logo">Google Logo</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="register">Register</string>
+    <string name="username">Name</string>
+    <string name="the_pantry_logo">The pantry logo</string>
+    <string name="onboard_image">Onboard image</string>
+    <string name="a_grocery_store_in_your_pocket">A grocery store in your pocket</string>
+    <string name="fulfil_all_you_grocery_needs">Fulfil all you grocery needs with a single tap from the comfort of your home.</string>
+    <string name="continue_text">Continue</string>
+    <string name="already_have_an_account_log_in">Already have an account? Log in</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="account">Account</string>
+    <string name="circle_background">Circle Background</string>
+    <string name="home_icon">Home icon</string>
+    <string name="cart_icon">Cart icon</string>
+    <string name="account_icon">Account icon</string>
+    <string name="item_image">Item Image</string>
+    <string name="toast">Toast</string>
+    <string name="_1_99">$1.99</string>
+    <string name="right_arrow">Right Arrow</string>
+    <string name="plus_sign">Plus Sign</string>
+    <string name="minus_sign">Minus Sign</string>
+    <string name="_1">1</string>
+    <string name="delete_button">Delete Button</string>
+    <string name="delete_icon">delete icon</string>
+    <string name="check_mark_icon">Check Mark icon</string>
+    <string name="thank_you_for_your_purchase">Thank you for your purchase</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="filter">Filter</string>
+    <string name="category">Category</string>
+    <string name="price_low_high">Price low - high</string>
+    <string name="price_high_low">Price high - low</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="apply">Apply</string>
+    <string name="_0_items">(0 items)</string>
+    <string name="checkout">Checkout</string>
+    <string name="_0_00">$0.00</string>
+    <string name="hey">Hey</string>
+    <string name="ahmed">Ahmed,</string>
+    <string name="start_buying_your_groceries">Start buying your groceries</string>
+    <string name="search">Search</string>
+    <string name="filter_button">Filter Button</string>
+    <string name="item_description">item description</string>
+    <string name="sliced_bread_browned_on_both_sides_by_exposure_to_radiant_heat_such_as_a_grill_or_fire">Sliced bread browned on both sides by exposure to radiant heat such as a grill or fire.</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="image_border">Image border</string>
+    <string name="user_image">User image</string>
+    <string name="ahmed_henna">Ahmed Henna</string>
+    <string name="change_password">Change password</string>
+    <string name="update_your_account_s_password">Update your account’s password.</string>
+    <string name="log_out">Log out</string>
+    <string name="log_out_from_your_account">Log out from your account</string>
+    <string name="back_button">back button</string>
+    <string name="a_reset_email_link_has_been_sent_successfully">A reset email link has been sent successfully</string>
+    <string name="default_text">Default</string>
+    <string name="email_icon">Email Icon</string>
+    <string name="james">James,</string>
+    <string name="james_baumeister">James Baumeister</string>
+    <string name="loading_products">Loading products</string>
+</resources>

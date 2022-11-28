@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "387219647843",
+    "project_id": "the-pantry-18da0",
+    "storage_bucket": "the-pantry-18da0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387219647843:android:d2bea748bbbcd6a47df756",
+        "android_client_info": {
+          "package_name": "com.ahmedhenna.thepantry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387219647843-i72q1rtvppsdjkp65k96j94575bf79sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ahmedhenna.thepantry",
+            "certificate_hash": "c304ef6505a1789739ebc764ae7c18b204899502"
+          }
+        },
+        {
+          "client_id": "387219647843-ee43kbvecqk1miniunqo8ed01mgkc7s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvJ-qlZlQXwK0NTglWGTa4bjvmeRMOwD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387219647843-ee43kbvecqk1miniunqo8ed01mgkc7s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

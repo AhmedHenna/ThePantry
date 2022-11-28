@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="166dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:contentDescription="@string/the_pantry_logo"
+        android:src="@drawable/logo_pantry"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/onboard_image"
+        android:layout_width="0dp"
+        android:layout_height="262dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="25dp"
+        android:contentDescription="@string/onboard_image"
+        android:src="@drawable/onboard"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <TextView
+        android:id="@id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="37dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/a_grocery_store_in_your_pocket"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/onboard_image" />
+
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="27dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/fulfil_all_you_grocery_needs"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="39dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/continue_text"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:backgroundTint="@color/red"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subTitle" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
