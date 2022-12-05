@@ -2,32 +2,38 @@ package com.ahmedhenna.thepantry.view_model
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.ahmedhenna.thepantry.R
+import com.ahmedhenna.thepantry.model.UserItem
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.ahmedhenna.thepantry.model.UserItem
-import com.ahmedhenna.thepantry.R
 
 class AuthViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
 
 
-    fun isSignedIn():Boolean{
+    fun isSignedIn(): Boolean {
         return auth.currentUser != null
     }
 
-    fun getCurrentUser(): FirebaseUser{
+    fun getCurrentUser(): FirebaseUser {
         return auth.currentUser!!
     }
 
-    fun signInEmailPassword(email: String, password: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit) {
+    fun signInEmailPassword(
+        email: String,
+        password: String,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 onComplete()
@@ -37,7 +43,13 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun registerEmailPassword(email: String,name: String, password: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit) {
+    fun registerEmailPassword(
+        email: String,
+        name: String,
+        password: String,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 val profileUpdates = UserProfileChangeRequest.Builder()
@@ -79,7 +91,7 @@ class AuthViewModel : ViewModel() {
         return GoogleSignIn.getClient(context, gso)
     }
 
-    fun authWithGoogle(token: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit){
+    fun authWithGoogle(token: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit) {
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener() { task ->
@@ -104,7 +116,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun signOut(){
+    fun signOut() {
         auth.signOut()
     }
 }
