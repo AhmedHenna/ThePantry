@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="344dp"
-        android:layout_height="328dp"
+        android:layout_width="370dp"
+        android:layout_height="307dp"
         android:background="@drawable/rounded_dialog_box"
         android:elevation="5dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/email_sent"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <ImageView
             android:id="@+id/emailIcon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="45dp"
+            android:layout_width="117dp"
+            android:layout_height="117dp"
+            android:layout_marginTop="60dp"
             android:contentDescription="@string/email_icon"
             android:src="@drawable/email"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -27,12 +38,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="@string/a_reset_email_link_has_been_sent_successfully"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="An email has been sent to the associated email successfully."
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/emailIcon" />
@@ -41,8 +52,8 @@
             android:id="@+id/dismissButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="14dp"
             android:text="@string/dismiss"
@@ -51,5 +62,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</layout>
 

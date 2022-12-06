@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="18dp"
+    android:layout_marginTop="20dp"
+    android:background="@drawable/rounded_corner_item_box_grey"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/orderNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/order_1"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="PrivateResource" />
+
+    <TextView
+        android:id="@+id/orderTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/sun_20_nov_6_00pm"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orderNumber"
+        tools:ignore="PrivateResource" />
+
+    <TextView
+        android:id="@+id/orderPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/egp_87_66"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orderTime"
+        tools:ignore="PrivateResource" />
+
+    <TextView
+        android:id="@+id/itemQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/_5_items"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/orderPrice"
+        app:layout_constraintTop_toBottomOf="@id/orderTime"
+        tools:ignore="PrivateResource" />
+
+    <ImageView
+        android:id="@+id/firstImage"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/orange"
+        android:contentDescription="first item" />
+
+    <ImageView
+        android:id="@+id/secondImage"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toEndOf="@id/firstImage"
+        android:src="@drawable/apple"
+        android:contentDescription="first item" />
+
+    <ImageView
+        android:id="@+id/thirdImage"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toEndOf="@id/secondImage"
+        android:src="@drawable/banana"
+        android:contentDescription="first item" />
+
+    <FrameLayout
+        android:id="@+id/addButton"
+        android:layout_width="72dp"
+        android:layout_height="32dp"
+        android:layout_margin="17dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/rounded_corner_item_box_red">
+
+        <ImageView
+            android:layout_width="59dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_add" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

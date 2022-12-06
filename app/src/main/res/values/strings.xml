@@ -81,4 +81,24 @@
     <string name="james">James,</string>
     <string name="james_baumeister">James Baumeister</string>
     <string name="loading_products">Loading products</string>
+    <string name="add_item">Add Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="image_url">Image URL</string>
+    <string name="item_category_comma_separated">Item Category (comma separated)</string>
+    <string name="item_price">Item Price</string>
+    <string name="submit_for_review">Submit for Review</string>
+    <string name="new_cairo_yasmine_5_villa_227">New Cairo, Yasmine 5, Villa 227</string>
+    <string name="_201114327532">+201114327532</string>
+    <string name="order_1">Order #1</string>
+    <string name="sun_20_nov_6_00pm">Sun, 20 Nov, 6:00pm</string>
+    <string name="egp_87_66">EGP 87.66</string>
+    <string name="_5_items">5 items</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="please_enter_the_email_associated_with_your_account">Please enter the email associated with your account</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="new_password">New Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="pick_delivery_address">Pick Delivery Address</string>
 </resources>
