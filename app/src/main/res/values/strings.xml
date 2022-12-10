@@ -101,4 +101,7 @@
     <string name="new_password">New Password</string>
     <string name="old_password">Old Password</string>
     <string name="pick_delivery_address">Pick Delivery Address</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="recover_password">Recover Password</string>
 </resources>
