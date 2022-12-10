@@ -44,13 +44,13 @@ class MainViewModel : ViewModel() {
 
     private fun populateList() {
         if (originalItems.isEmpty()) {
-            db.collection("groceries").addSnapshotListener { value, error->
-                if(error != null || value == null){
+            db.collection("groceries").addSnapshotListener { value, error ->
+                if (error != null || value == null) {
                     Log.e("Groceries Failed", error?.stackTraceToString() ?: "Unknown error")
                 } else {
                     val items =
                         value.documents.mapNotNull { doc -> doc.toObject(GroceryItem::class.java) }
-                    _items.value = items.shuffled().filter { it.status ===  Status.APPROVED}
+                    _items.value = items.shuffled().filter { it.status === Status.APPROVED }
                     originalItems.addAll(_items.value!!)
                     filteredItems.value =
                         mutableListOf<GroceryItem>().apply { addAll(_items.value!!) }
@@ -232,5 +232,49 @@ class MainViewModel : ViewModel() {
         val r = Random()
         val randomNumber = r.nextInt(1000 + 1)
         return name.lowercase().substring(0, name.length.coerceAtMost(3)) + randomNumber
+    }
+
+    fun addRecommendAsDoctor(
+        sku: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit
+    ) {
+        val currentUser = auth.currentUser!!
+        db.collection("groceries").whereEqualTo("sku", sku).limit(1).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                it.result.documents[0].reference.update(
+                    "recommendedBy",
+                    FieldValue.arrayUnion(currentUser.displayName)
+                ).addOnCompleteListener { updateTask ->
+                    if (updateTask.isSuccessful) {
+                        onComplete()
+                    } else {
+                        onFail(updateTask.exception?.localizedMessage ?: "Unknown error")
+                    }
+                }
+            } else {
+                onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+    fun removeRecommendAsDoctor(
+        sku: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit
+    ) {
+        val currentUser = auth.currentUser!!
+        db.collection("groceries").whereEqualTo("sku", sku).limit(1).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                it.result.documents[0].reference.update(
+                    "recommendedBy",
+                    FieldValue.arrayRemove(currentUser.displayName)
+                ).addOnCompleteListener { updateTask ->
+                    if (updateTask.isSuccessful) {
+                        onComplete()
+                    } else {
+                        onFail(updateTask.exception?.localizedMessage ?: "Unknown error")
+                    }
+                }
+            } else {
+                onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
     }
 }

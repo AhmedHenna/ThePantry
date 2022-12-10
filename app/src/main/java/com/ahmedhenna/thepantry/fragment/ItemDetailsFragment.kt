@@ -4,14 +4,16 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,15 +24,17 @@ import com.ahmedhenna.thepantry.common.capitalizeWords
 import com.ahmedhenna.thepantry.common.px
 import com.ahmedhenna.thepantry.common.toBitmap
 import com.ahmedhenna.thepantry.databinding.FragmentItemDetailsBinding
+import com.ahmedhenna.thepantry.view_model.AuthViewModel
 import com.ahmedhenna.thepantry.view_model.MainViewModel
 
 
-class ItemDetailsFragment : Fragment() {
+class ItemDetailsFragment : LoadableFragment() {
     private lateinit var binding: FragmentItemDetailsBinding
     private lateinit var navController: NavController
 
     private val args by navArgs<ItemDetailsFragmentArgs>()
     private val model: MainViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -90,6 +94,67 @@ class ItemDetailsFragment : Fragment() {
                 }
             }
         }
+
+        if (item.recommendedBy.isEmpty()) {
+            binding.recommendedBy.visibility = View.GONE
+        } else {
+            val recommendedList = item.recommendedBy.take(item.recommendedBy.size.coerceAtMost(2))
+            var recommendedString = recommendedList.joinToString(", ")
+
+            if(item.recommendedBy.size - 2 > 0){
+                recommendedString += "+ ${item.recommendedBy.size - 2} more"
+            }
+            binding.recommendedNames.text = recommendedString
+        }
+
+        binding.itemCategories.text = item.categories.joinToString(", ")
+
+        authViewModel.getCurrentUser {
+            if (it.doctor) {
+                binding.plusImage.visibility = View.GONE
+                binding.minusImage.visibility = View.GONE
+                binding.numberOfItems.visibility = View.GONE
+
+                val isRecommended = item.recommendedBy.contains("${it.firstName} ${it.lastName}")
+                setUpRecommended(isRecommended)
+            }
+        }
+
+
+    }
+
+    private fun setUpRecommended(recommended: Boolean) {
+        if (recommended) {
+            binding.addButton.text = "Remove recommendation"
+            binding.addButton.setOnClickListener {
+                showLoading()
+                model.removeRecommendAsDoctor(args.sku,
+                    onComplete = {
+                        hideLoading()
+                        setUpRecommended(false)
+                    },
+                    onFail = {
+                        hideLoading()
+                        Log.e("REMOVE REC FAIL", it)
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    })
+            }
+        } else {
+            binding.addButton.text = "Recommend"
+            binding.addButton.setOnClickListener {
+                showLoading()
+                model.addRecommendAsDoctor(args.sku,
+                    onComplete = {
+                        hideLoading()
+                        setUpRecommended(true)
+                    },
+                    onFail = {
+                        hideLoading()
+                        Log.e("REMOVE REC FAIL", it)
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    })
+            }
+        }
     }
 
     private fun setClickListeners() {
@@ -112,6 +177,7 @@ class ItemDetailsFragment : Fragment() {
             navController.popBackStack()
         }
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun setUpObservers() {
