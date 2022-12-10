@@ -10,8 +10,8 @@ class GroceryItemDiffCallback : DiffUtil.ItemCallback<GroceryItem>() {
     }
 
     override fun areContentsTheSame(oldItem: GroceryItem, newItem: GroceryItem): Boolean {
-        return oldItem.sku == newItem.sku && oldItem.category == newItem.category
-                && oldItem.description == newItem.description && oldItem.category == newItem.category
+        return oldItem.sku == newItem.sku && oldItem.categories == newItem.categories
+                && oldItem.description == newItem.description && oldItem.categories == newItem.categories
                 && oldItem.image == newItem.image && oldItem.price == newItem.price
     }
 }

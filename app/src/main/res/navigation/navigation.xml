@@ -64,6 +64,15 @@
         <action
             android:id="@+id/action_bottomNavigationFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.AddProductFragment"
+        android:label="AddProductFragment"
+        tools:layout="@layout/fragment_add_item"/>
 
 </navigation>

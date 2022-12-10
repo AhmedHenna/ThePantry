@@ -16,6 +16,7 @@ import com.ahmedhenna.thepantry.adapter.diff.GroceryCartItemDiffCallback
 import com.ahmedhenna.thepantry.common.capitalizeWords
 import com.ahmedhenna.thepantry.common.getDrawableIdentifierFromString
 import com.ahmedhenna.thepantry.common.px
+import com.ahmedhenna.thepantry.common.toBitmap
 import com.ahmedhenna.thepantry.databinding.ViewItemCartBinding
 import com.ahmedhenna.thepantry.model.GroceryCartItem
 
@@ -80,24 +81,24 @@ class GroceryCartItemsAdapter(
         binding.itemPrice.text = "\$${String.format("%.2f", cartItem.price * item.quantity)}"
         binding.numberOfItems.text = item.quantity.toString()
 
-        val bitmap = BitmapFactory.decodeResource(
-            context.resources,
-            context.getDrawableIdentifierFromString(cartItem.image)
-        )
-        binding.productIcon.setImageBitmap(bitmap)
+        cartItem.image.toBitmap(context) { bitmap ->
+            binding.productIcon.setImageBitmap(bitmap)
 
-        Palette.Builder(bitmap).generate {
-            val green = ContextCompat.getColor(context, R.color.green)
-            it?.let { palette ->
-                var lightColor =
-                    palette.getLightVibrantColor(green)
-                if (lightColor == green) {
-                    lightColor = palette.getDominantColor(green)
+            Palette.Builder(bitmap).generate {
+                val green = ContextCompat.getColor(context, R.color.green)
+                it?.let { palette ->
+                    var lightColor =
+                        palette.getLightVibrantColor(green)
+
+                    if (lightColor == green) {
+                        lightColor = palette.getDominantColor(green)
+                    }
+
+                    val drawable: GradientDrawable =
+                        binding.iconFrame.background as GradientDrawable
+                    drawable.setStroke(2.px, lightColor)
+
                 }
-
-                val drawable: GradientDrawable = binding.iconFrame.background as GradientDrawable
-                drawable.setStroke(2.px, lightColor)
-
             }
         }
     }
