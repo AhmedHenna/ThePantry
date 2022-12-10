@@ -14,7 +14,7 @@ import androidx.navigation.Navigation
 import com.ahmedhenna.thepantry.R
 import com.ahmedhenna.thepantry.common.px
 import com.ahmedhenna.thepantry.databinding.FragmentAccountBinding
-import com.ahmedhenna.thepantry.dialog.ResetConfirmDialogFragment
+import com.ahmedhenna.thepantry.dialog.ChangePasswordDialogFragment
 import com.ahmedhenna.thepantry.view_model.AuthViewModel
 
 class AccountFragment : LoadableFragment() {
@@ -37,21 +37,34 @@ class AccountFragment : LoadableFragment() {
         parentNavController = Navigation.findNavController(requireActivity(), R.id.mainNav)
 
         binding.logOut.setOnClickListener {
-            val action = BottomNavigationFragmentDirections.actionBottomNavigationFragmentToOnboardingFragment()
+            val action =
+                BottomNavigationFragmentDirections.actionBottomNavigationFragmentToOnboardingFragment()
             parentNavController.navigate(action)
         }
 
         binding.changePassword.setOnClickListener {
-            showLoading()
-            authViewModel.sendResetPasswordEmail(onComplete = {
-                val resetConfirmDialogFragment = ResetConfirmDialogFragment {}
-                resetConfirmDialogFragment.show(childFragmentManager, "RESET")
-                hideLoading()
-            }, onFail = {
-                Log.e("RESET FAIL", it)
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                hideLoading()
-            })
+            val changePasswordDialog =
+                ChangePasswordDialogFragment(
+                    onChangeClick = { oldPassword, newPassword ->
+                        showLoading()
+                        authViewModel.changePassword(oldPassword, newPassword,
+                            onComplete = {
+                                hideLoading()
+                                Toast.makeText(
+                                    context,
+                                    "Password changed successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                            },
+                            onFail = {
+                                Log.e("CHANGE FAIL", it)
+                                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                                hideLoading()
+                            })
+                    })
+            changePasswordDialog.show(childFragmentManager, "CHANGE PWD")
+
         }
 
         binding.logOut.setOnClickListener {
@@ -66,8 +79,9 @@ class AccountFragment : LoadableFragment() {
             drawable.setStroke(2.px, ContextCompat.getColor(it, R.color.red))
         }
 
-        val user = authViewModel.getCurrentUser()
-        binding.userName.text = user.displayName
+        authViewModel.getCurrentUser {
+            binding.userName.text = "${it.firstName} ${it.lastName}"
+        }
 
 
     }

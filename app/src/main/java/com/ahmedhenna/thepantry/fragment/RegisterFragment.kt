@@ -31,7 +31,8 @@ class RegisterFragment : AuthFragment() {
         initTransitions()
         setClickListeners()
         if (authViewModel.isSignedIn()) {
-            //TODO: Navigate to home page
+            navigateToTabs()
+
         }
     }
 
@@ -46,7 +47,7 @@ class RegisterFragment : AuthFragment() {
             navigateToLogin()
         }
         binding.registerButton.setOnClickListener {
-            if (binding.emailEditText.text.isNullOrBlank() || binding.passwordEditText.text.isNullOrBlank() || binding.usernameEditText.text.isNullOrBlank()) {
+            if (binding.emailEditText.text.isNullOrBlank() || binding.passwordEditText.text.isNullOrBlank() || binding.firstNameEditText.text.isNullOrBlank() || binding.lastNameEditText.text.isNullOrBlank()) {
                 Toast.makeText(requireContext(), "Fields cannot be empty", Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
@@ -54,10 +55,11 @@ class RegisterFragment : AuthFragment() {
             showLoading()
             authViewModel.registerEmailPassword(
                 binding.emailEditText.text.toString(),
-                binding.usernameEditText.text.toString(),
+                binding.firstNameEditText.text.toString(),
+                binding.lastNameEditText.text.toString(),
                 binding.passwordEditText.text.toString(),
                 onComplete = {
-                    //TODO: Navigate to home page
+                    navigateToTabs()
                     hideLoading()
                 },
                 onFail = {
@@ -71,7 +73,7 @@ class RegisterFragment : AuthFragment() {
             showLoading()
             initiateGoogleAuth(
                 onComplete = {
-                    //TODO: Navigate to home page
+                    navigateToTabs()
                     hideLoading()
                 },
                 onFail = {
@@ -86,6 +88,12 @@ class RegisterFragment : AuthFragment() {
     private fun navigateToLogin() {
         val action =
             RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToTabs() {
+        val action =
+            RegisterFragmentDirections.actionRegisterFragmentToBottomNavigationFragment()
         navController.navigate(action)
     }
 

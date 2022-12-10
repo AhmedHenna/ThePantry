@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_onboardingFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_onboardingFragment_to_bottomNavigationFragment"
+            app:destination="@id/bottomNavigationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -22,6 +25,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_bottomNavigationFragment"
+            app:destination="@id/bottomNavigationFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -31,7 +37,33 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_bottomNavigationFragment"
+            app:destination="@id/bottomNavigationFragment" />
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemDetailsFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.ItemDetailsFragment"
+        tools:layout="@layout/fragment_item_details"
+        android:label="ItemDetailsFragment" >
+        <argument
+            android:name="sku"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bottomNavigationFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.BottomNavigationFragment"
+        android:label="BottomNavigationFragment"
+        tools:layout="@layout/fragment_bottom_navigation">
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment" />
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
 
 </navigation>

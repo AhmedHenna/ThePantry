@@ -35,7 +35,8 @@ class OnboardingFragment : Fragment() {
         initTransitions()
         setUpClickListeners()
         if (authViewModel.isSignedIn()) {
-            //TODO: Navigate to home page
+            navigateToTabs()
+
         }
     }
 
@@ -54,6 +55,12 @@ class OnboardingFragment : Fragment() {
     private fun navigateToLogin() {
         val action =
             OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToTabs() {
+        val action =
+            OnboardingFragmentDirections.actionOnboardingFragmentToBottomNavigationFragment()
         navController.navigate(action)
     }
 

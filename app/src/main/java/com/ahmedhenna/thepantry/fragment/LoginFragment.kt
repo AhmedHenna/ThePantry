@@ -11,6 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.ahmedhenna.thepantry.R
 import com.ahmedhenna.thepantry.databinding.FragmentLoginBinding
+import com.ahmedhenna.thepantry.dialog.RecoverPasswordDialogFragment
+import com.ahmedhenna.thepantry.dialog.ResetConfirmDialogFragment
 
 class LoginFragment : AuthFragment() {
     private lateinit var binding: FragmentLoginBinding
@@ -31,7 +33,7 @@ class LoginFragment : AuthFragment() {
         initTransitions()
         setClickListeners()
         if (authViewModel.isSignedIn()) {
-            //TODO: Navigate to home page
+            navigateToTabs()
         }
     }
 
@@ -56,7 +58,7 @@ class LoginFragment : AuthFragment() {
                 binding.emailEditText.text.toString(),
                 binding.passwordEditText.text.toString(),
                 onComplete = {
-                    //TODO: Navigate to home page
+                    navigateToTabs()
                     hideLoading()
                 },
                 onFail = {
@@ -69,7 +71,7 @@ class LoginFragment : AuthFragment() {
             showLoading()
             initiateGoogleAuth(
                 onComplete = {
-                    //TODO: Navigate to home page
+                    navigateToTabs()
                     hideLoading()
                 },
                 onFail = {
@@ -78,11 +80,36 @@ class LoginFragment : AuthFragment() {
                     hideLoading()
                 })
         }
+
+        binding.recoverPassword.setOnClickListener {
+            val recoverPasswordDialog = RecoverPasswordDialogFragment(onRecoverClick = { email ->
+                showLoading()
+                authViewModel.sendResetPasswordEmail(
+                    email,
+                    onComplete = {
+                        hideLoading()
+                        val resetConfirmDialogFragment = ResetConfirmDialogFragment {}
+                        resetConfirmDialogFragment.show(childFragmentManager, "RESET")
+                    },
+                    onFail = {
+                        hideLoading()
+                        Log.e("FAIL SEND RESET", it)
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    })
+            })
+            recoverPasswordDialog.show(childFragmentManager, "RECOVER")
+        }
     }
 
     private fun navigateToRegister() {
         val action =
             LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToTabs() {
+        val action =
+            LoginFragmentDirections.actionLoginFragmentToBottomNavigationFragment()
         navController.navigate(action)
     }
 }

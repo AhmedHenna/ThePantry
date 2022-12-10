@@ -7,11 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.fragment.app.DialogFragment
 import com.ahmedhenna.thepantry.databinding.DialogResetConfirmBinding
 
-class ResetConfirmDialogFragment(private val onDismiss: () -> Unit) : DialogFragment() {
+class ResetConfirmDialogFragment(onDismiss: () -> Unit) : BaseDialog(onDismiss) {
 
     private lateinit var binding: DialogResetConfirmBinding
 
@@ -20,9 +18,7 @@ class ResetConfirmDialogFragment(private val onDismiss: () -> Unit) : DialogFrag
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme)
+        fixDialog()
         binding = DialogResetConfirmBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,15 +29,4 @@ class ResetConfirmDialogFragment(private val onDismiss: () -> Unit) : DialogFrag
             dismiss()
         }
     }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        onDismiss()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        dismissAllowingStateLoss()
-    }
-
 }

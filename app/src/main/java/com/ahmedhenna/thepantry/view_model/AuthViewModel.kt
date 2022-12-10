@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -24,8 +25,13 @@ class AuthViewModel : ViewModel() {
         return auth.currentUser != null
     }
 
-    fun getCurrentUser(): FirebaseUser {
-        return auth.currentUser!!
+    fun getCurrentUser(onComplete: (UserItem)->Unit) {
+        val authenticatedUser = auth.currentUser!!
+        db.collection("users").document(authenticatedUser.uid).get().addOnCompleteListener {
+            if(it.isSuccessful && it.result != null){
+                onComplete(it.result.toObject(UserItem::class.java)!!)
+            }
+        }
     }
 
     fun signInEmailPassword(
@@ -45,7 +51,8 @@ class AuthViewModel : ViewModel() {
 
     fun registerEmailPassword(
         email: String,
-        name: String,
+        firstName: String,
+        lastName: String,
         password: String,
         onComplete: () -> Unit,
         onFail: (msg: String) -> Unit
@@ -53,12 +60,12 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(name).build()
+                    .setDisplayName("$firstName $lastName").build()
                 it.result.user!!.updateProfile(profileUpdates)
                     .addOnCompleteListener { updateProfileResult ->
                         if (updateProfileResult.isSuccessful) {
                             db.collection("users").document(it.result!!.user!!.uid)
-                                .set(UserItem(name, email, listOf(), listOf()))
+                                .set(UserItem(firstName, lastName, email, listOf(), listOf()))
                                 .addOnCompleteListener { databaseResult ->
                                     if (databaseResult.isSuccessful) {
                                         onComplete()
@@ -105,13 +112,40 @@ class AuthViewModel : ViewModel() {
 
     }
 
-    fun sendResetPasswordEmail(onComplete: () -> Unit, onFail: (msg: String) -> Unit) {
+    fun sendResetPasswordEmail(email: String, onComplete: () -> Unit, onFail: (msg: String) -> Unit) {
         val currentUser = auth.currentUser
-        auth.sendPasswordResetEmail(currentUser!!.email!!).addOnCompleteListener {
+        auth.sendPasswordResetEmail(email).addOnCompleteListener {
             if (it.isSuccessful) {
                 onComplete()
             } else {
                 onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
+        val currentUser = auth.currentUser!!
+        currentUser.reauthenticate(
+            EmailAuthProvider.getCredential(
+                currentUser.email!!,
+                currentPassword
+            )
+        ).addOnCompleteListener { result ->
+            if (result.isSuccessful) {
+                currentUser.updatePassword(newPassword).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        onComplete()
+                    } else {
+                        onFail(it.exception?.localizedMessage ?: "Unknown error")
+                    }
+                }
+            } else {
+                onFail(result.exception?.localizedMessage ?: "Unknown error")
             }
         }
     }
