@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahmedhenna.thepantry.common.Sort
-import com.ahmedhenna.thepantry.model.GroceryCartItem
-import com.ahmedhenna.thepantry.model.GroceryItem
-import com.ahmedhenna.thepantry.model.OrderItem
-import com.ahmedhenna.thepantry.model.UserItem
+import com.ahmedhenna.thepantry.model.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -47,20 +44,18 @@ class MainViewModel : ViewModel() {
 
     private fun populateList() {
         if (originalItems.isEmpty()) {
-            db.collection("groceries").get().addOnCompleteListener {
-                if (it.isSuccessful) {
+            db.collection("groceries").addSnapshotListener { value, error->
+                if(error != null || value == null){
+                    Log.e("Groceries Failed", error?.stackTraceToString() ?: "Unknown error")
+                } else {
                     val items =
-                        it.result.documents.mapNotNull { doc -> doc.toObject(GroceryItem::class.java) }
-                    _items.value = items.shuffled()
+                        value.documents.mapNotNull { doc -> doc.toObject(GroceryItem::class.java) }
+                    _items.value = items.shuffled().filter { it.status ===  Status.APPROVED}
                     originalItems.addAll(_items.value!!)
                     filteredItems.value =
                         mutableListOf<GroceryItem>().apply { addAll(_items.value!!) }
-                } else {
-                    Log.e("Groceries Failed", it.exception?.stackTraceToString() ?: "Unknown")
-                    populateList()
                 }
             }
-
         }
     }
 
@@ -165,41 +160,77 @@ class MainViewModel : ViewModel() {
                 filtered.addAll(originalItems)
             }
             "Fruit" -> {
-                originalItems.forEach { if (it.category == "fruit") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("fruit")) filtered.add(it) }
             }
             "Vegetables" -> {
-                originalItems.forEach { if (it.category == "vegetable") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("vegetable")) filtered.add(it) }
             }
             "Dairy" -> {
-                originalItems.forEach { if (it.category == "dairy") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("dairy")) filtered.add(it) }
             }
             "Meat" -> {
-                originalItems.forEach { if (it.category == "meat") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("meat")) filtered.add(it) }
             }
             "Condiments" -> {
-                originalItems.forEach { if (it.category == "condiment") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("condiment")) filtered.add(it) }
             }
             "Snacks" -> {
-                originalItems.forEach { if (it.category == "snack") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("snack")) filtered.add(it) }
             }
             "Grain" -> {
-                originalItems.forEach { if (it.category == "grain") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("grain")) filtered.add(it) }
             }
             "Drinks" -> {
-                originalItems.forEach { if (it.category == "drinks") filtered.add(it) }
+                originalItems.forEach { if (it.categories.contains("drink")) filtered.add(it) }
             }
         }
 
-        when(sort){
-            Sort.DEFAULT->{}
-            Sort.LOW_TO_HIGH->{
+        when (sort) {
+            Sort.DEFAULT -> {}
+            Sort.LOW_TO_HIGH -> {
                 filtered.sortBy { it.price }
             }
-            Sort.HIGH_TO_LOW->{
+            Sort.HIGH_TO_LOW -> {
                 filtered.sortByDescending { it.price }
             }
         }
         filteredItems.value = filtered
         search(currentSearch.value!!)
+    }
+
+    fun addItemAsDoctor(
+        name: String,
+        description: String,
+        price: String,
+        category: String,
+        imageURL: String,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
+        val categories = category.split(",").map { it.trim().lowercase() }
+        val currentUser = auth.currentUser!!
+        val groceryItem = GroceryItem(
+            name,
+            description,
+            generateSku(name),
+            price.toDouble(),
+            categories,
+            imageURL,
+            Status.PENDING,
+            "${currentUser.displayName}"
+        )
+        db.collection("groceries").add(groceryItem).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onComplete()
+            } else {
+                onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+    private fun generateSku(name: String): String {
+        val r = Random()
+        val randomNumber = r.nextInt(1000 + 1)
+        return name.lowercase().substring(0, name.length.coerceAtMost(3)) + randomNumber
     }
 }

@@ -2,7 +2,6 @@ package com.ahmedhenna.thepantry.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmedhenna.thepantry.R
 import com.ahmedhenna.thepantry.adapter.diff.GroceryItemDiffCallback
 import com.ahmedhenna.thepantry.common.capitalizeWords
-import com.ahmedhenna.thepantry.common.getDrawableIdentifierFromString
 import com.ahmedhenna.thepantry.common.px
+import com.ahmedhenna.thepantry.common.toBitmap
 import com.ahmedhenna.thepantry.databinding.ViewItemShopBinding
 import com.ahmedhenna.thepantry.model.GroceryItem
 
@@ -56,25 +55,24 @@ class GroceryItemsAdapter(
         binding.itemName.text = item.name.capitalizeWords()
         binding.itemPrice.text = "\$${String.format("%.2f", item.price)}"
 
-        val bitmap = BitmapFactory.decodeResource(
-            context.resources,
-            context.getDrawableIdentifierFromString(item.image)
-        )
-        binding.productIcon.setImageBitmap(bitmap)
+        item.image.toBitmap(context) { bitmap ->
+            binding.productIcon.setImageBitmap(bitmap)
 
-        Palette.Builder(bitmap).generate {
-            val green = ContextCompat.getColor(context, R.color.green)
-            it?.let { palette ->
-                var lightColor =
-                    palette.getLightVibrantColor(green)
+            Palette.Builder(bitmap).generate {
+                val green = ContextCompat.getColor(context, R.color.green)
+                it?.let { palette ->
+                    var lightColor =
+                        palette.getLightVibrantColor(green)
 
-                if (lightColor == green) {
-                    lightColor = palette.getDominantColor(green)
+                    if (lightColor == green) {
+                        lightColor = palette.getDominantColor(green)
+                    }
+
+                    val drawable: GradientDrawable =
+                        binding.iconFrame.background as GradientDrawable
+                    drawable.setStroke(2.px, lightColor)
+
                 }
-
-                val drawable: GradientDrawable = binding.iconFrame.background as GradientDrawable
-                drawable.setStroke(2.px, lightColor)
-
             }
         }
 

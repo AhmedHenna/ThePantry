@@ -1,7 +1,6 @@
 package com.ahmedhenna.thepantry.fragment
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -20,8 +19,8 @@ import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
 import com.ahmedhenna.thepantry.R
 import com.ahmedhenna.thepantry.common.capitalizeWords
-import com.ahmedhenna.thepantry.common.getDrawableIdentifierFromString
 import com.ahmedhenna.thepantry.common.px
+import com.ahmedhenna.thepantry.common.toBitmap
 import com.ahmedhenna.thepantry.databinding.FragmentItemDetailsBinding
 import com.ahmedhenna.thepantry.view_model.MainViewModel
 
@@ -52,7 +51,9 @@ class ItemDetailsFragment : Fragment() {
         setUpObservers()
         ViewCompat.setTransitionName(binding.itemImage, "image_${args.sku}")
         sharedElementEnterTransition =
-            context?.let { TransitionInflater.from(it).inflateTransition(android.R.transition.move) }
+            context?.let {
+                TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+            }
 
 
     }
@@ -67,30 +68,26 @@ class ItemDetailsFragment : Fragment() {
 
 
         val context = requireContext()
-        val bitmap = BitmapFactory.decodeResource(
-            context.resources,
-            context.getDrawableIdentifierFromString(item.image)
-        )
-        binding.itemImage.setImageBitmap(bitmap)
 
-        Palette.Builder(bitmap).generate {
-            val green = ContextCompat.getColor(context, R.color.green)
-            it?.let { palette ->
-                var lightColor =
-                    palette.getLightVibrantColor(green)
+        item.image.toBitmap(context) { bitmap ->
+            binding.itemImage.setImageBitmap(bitmap)
 
-                if (lightColor == green) {
-                    lightColor = palette.getDominantColor(green)
+            Palette.Builder(bitmap).generate {
+                val green = ContextCompat.getColor(context, R.color.green)
+                it?.let { palette ->
+                    var lightColor =
+                        palette.getLightVibrantColor(green)
+
+                    if (lightColor == green) {
+                        lightColor = palette.getDominantColor(green)
+                    }
+
+                    val drawable: GradientDrawable =
+                        binding.itemFrame.background as GradientDrawable
+                    drawable.setStroke(2.px, lightColor)
+                    binding.colorBackground.setBackgroundColor(lightColor)
+
                 }
-
-                val drawable: GradientDrawable = binding.itemFrame.background as GradientDrawable
-                drawable.setStroke(2.px, lightColor)
-
-                binding.colorBackground.setBackgroundColor(lightColor)
-
-                val window = requireActivity().window
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = lightColor
             }
         }
     }

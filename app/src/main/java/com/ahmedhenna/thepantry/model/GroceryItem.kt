@@ -5,6 +5,14 @@ data class GroceryItem(
     val description: String = "",
     val sku: String = "",
     val price: Double = 0.0,
-    val category: String = "",
+    val categories: List<String> = listOf(),
     val image: String = "",
+    val status: Status = Status.APPROVED,
+    val addedBy: String? = null,
+    val recommendedBy: List<String> = listOf()
 )
+
+enum class Status{
+    PENDING,
+    APPROVED
+}

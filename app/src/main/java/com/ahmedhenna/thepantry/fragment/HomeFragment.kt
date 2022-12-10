@@ -3,9 +3,11 @@ package com.ahmedhenna.thepantry.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.addTextChangedListener
@@ -67,6 +69,14 @@ class HomeFragment : Fragment() {
 
         authViewModel.getCurrentUser{
             binding.userName.text = "${it.firstName} ${it.lastName}"
+            if(it.doctor){
+                binding.plusImage.visibility = View.VISIBLE
+                binding.plusImage.setOnClickListener {
+                    navigateToAddProduct()
+                }
+            } else {
+                binding.plusImage.visibility = View.GONE
+            }
         }
 
     }
@@ -124,6 +134,11 @@ class HomeFragment : Fragment() {
         parentNavController.navigate(action, extras)
     }
 
+    private fun navigateToAddProduct() {
+        val action =
+            BottomNavigationFragmentDirections.actionBottomNavigationFragmentToAddProductFragment()
+        parentNavController.navigate(action)
+    }
 
 
 }

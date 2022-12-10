@@ -20,8 +20,7 @@
             android:layout_width="59dp"
             android:layout_height="59dp"
             android:layout_gravity="center"
-            android:contentDescription="@string/item_image"
-            android:src="@drawable/icon_bread" />
+            android:contentDescription="@string/item_image" />
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
