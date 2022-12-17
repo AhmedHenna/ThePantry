@@ -54,6 +54,7 @@ class GroceryCartItemsAdapter(
         val cartItem = item.item
         val binding = holder.binding
 
+        binding.productIcon.setImageResource(android.R.color.transparent)
 
         binding.deleteButton.setOnClickListener {
             onDeleteClick(item)

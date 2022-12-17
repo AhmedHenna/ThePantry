@@ -3,11 +3,9 @@ package com.ahmedhenna.thepantry.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.addTextChangedListener
@@ -65,11 +63,13 @@ class HomeFragment : Fragment() {
             filterDialogFragment.show(childFragmentManager, "FILTER")
         }
         sharedElementEnterTransition =
-            context?.let { TransitionInflater.from(it).inflateTransition(android.R.transition.move) }
+            context?.let {
+                TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+            }
 
-        authViewModel.getCurrentUser{
+        authViewModel.getCurrentUser {
             binding.userName.text = "${it.firstName} ${it.lastName}"
-            if(it.doctor){
+            if (it.doctor) {
                 binding.plusImage.visibility = View.VISIBLE
                 binding.plusImage.setOnClickListener {
                     navigateToAddProduct()
@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
 
     private fun setObservers() {
         model.items.observe(viewLifecycleOwner) {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 binding.recyclerView.visibility = View.VISIBLE
             }
             adapter.submitList(it.toMutableList())
@@ -106,18 +106,44 @@ class HomeFragment : Fragment() {
 
         }
 
-        model.currentSort.observe(viewLifecycleOwner){
-            if(model.currentSort.value != Sort.DEFAULT || model.currentCategory.value != "All"){
-                binding.filterButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.light_green))
+        model.currentSort.observe(viewLifecycleOwner) {
+            if (model.currentSort.value != Sort.DEFAULT || model.currentCategory.value != "All") {
+                binding.filterButton.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.light_green
+                    )
+                )
             } else {
-                binding.filterButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.black))
+                binding.filterButton.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black
+                    )
+                )
             }
         }
-        model.currentCategory.observe(viewLifecycleOwner){
-            if(model.currentSort.value != Sort.DEFAULT || model.currentCategory.value != "All"){
-                binding.filterButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.light_green))
+        model.currentCategory.observe(viewLifecycleOwner) {
+            if (model.currentSort.value != Sort.DEFAULT || model.currentCategory.value != "All") {
+                binding.filterButton.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.light_green
+                    )
+                )
             } else {
-                binding.filterButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.black))
+                binding.filterButton.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black
+                    )
+                )
+            }
+        }
+
+        model.currentSearch.observe(viewLifecycleOwner){
+            if(it != binding.searchBarEditText.text.toString()){
+                binding.searchBarEditText.setText(it)
             }
         }
 

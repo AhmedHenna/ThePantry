@@ -2,17 +2,20 @@ package com.ahmedhenna.thepantry.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmedhenna.thepantry.adapter.GroceryCartItemsAdapter
 import com.ahmedhenna.thepantry.databinding.FragmentCartBinding
 import com.ahmedhenna.thepantry.dialog.ConfirmationDialogFragment
+import com.ahmedhenna.thepantry.view_model.AuthViewModel
 import com.ahmedhenna.thepantry.view_model.MainViewModel
 
 class CartFragment : Fragment() {
@@ -21,6 +24,7 @@ class CartFragment : Fragment() {
     private lateinit var adapter: GroceryCartItemsAdapter
 
     private val model: MainViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -39,9 +43,15 @@ class CartFragment : Fragment() {
         setObservers()
 
         binding.checkoutButton.setOnClickListener {
-            val confirmationDialogFragment = ConfirmationDialogFragment {}
-            confirmationDialogFragment.show(childFragmentManager, "CONFIRM")
-            model.submitOrder()
+            authViewModel.getCurrentUser {user->
+                val selectAddressSheet = AddressSelectionSheetFragment(user.addresses,onAddressSelected = {
+                    model.submitOrder(it)
+                    val confirmationDialogFragment = ConfirmationDialogFragment {}
+                    confirmationDialogFragment.show(childFragmentManager, "CONFIRM")
+
+                })
+                selectAddressSheet.show(childFragmentManager, "SELECT ADD")
+            }
         }
     }
 

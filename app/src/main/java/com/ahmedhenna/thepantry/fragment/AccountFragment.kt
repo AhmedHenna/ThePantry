@@ -83,6 +83,18 @@ class AccountFragment : LoadableFragment() {
             binding.userName.text = "${it.firstName} ${it.lastName}"
         }
 
+        binding.addresses.setOnClickListener {
+            val action =
+                BottomNavigationFragmentDirections.actionBottomNavigationFragmentToAddressFragment()
+            parentNavController.navigate(action)
+        }
+
+        binding.orderHistory.setOnClickListener {
+            val action =
+                BottomNavigationFragmentDirections.actionBottomNavigationFragmentToOrdersFragment()
+            parentNavController.navigate(action)
+        }
+
 
     }
 

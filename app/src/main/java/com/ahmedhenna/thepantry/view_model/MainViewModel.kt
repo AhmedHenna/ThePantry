@@ -24,7 +24,7 @@ class MainViewModel : ViewModel() {
     private val _cartItems = MutableLiveData<List<GroceryCartItem>>(listOf())
     val cartItems: LiveData<List<GroceryCartItem>> = _cartItems
 
-    private val currentSearch = MutableLiveData("")
+    val currentSearch = MutableLiveData("")
 
     private val _currentSort = MutableLiveData(Sort.DEFAULT)
     val currentSort: LiveData<Sort> = _currentSort
@@ -84,6 +84,28 @@ class MainViewModel : ViewModel() {
 
     }
 
+    fun populateCart(cartItems: List<GroceryCartItem>) {
+        val list = _cartItems.value!!.toMutableList()
+
+        for(cartItem in cartItems){
+            var added = false
+            for (oldItem in list) {
+                if (oldItem.item.sku == cartItem.item.sku) {
+                    oldItem.quantity = oldItem.quantity + cartItem.quantity
+                    added = true
+                }
+            }
+            if (!added) {
+                list.add(GroceryCartItem(cartItem.item, cartItem.quantity))
+            }
+        }
+
+
+
+        db.collection("users").document(auth.uid!!).update(mapOf("cart" to list))
+
+    }
+
     fun increaseQuantity(item: GroceryItem) {
         val list = _cartItems.value!!.toMutableList()
         for (oldItem in list.toList()) {
@@ -126,12 +148,44 @@ class MainViewModel : ViewModel() {
         return null
     }
 
-    fun submitOrder() {
-        val order = OrderItem(_cartItems.value!!, Date(System.currentTimeMillis()))
+    fun submitOrder(address: AddressItem) {
+        val order = OrderItem(_cartItems.value!!, Date(System.currentTimeMillis()), address)
         db.collection("users").document(auth.uid!!).update("orders", FieldValue.arrayUnion(order))
         db.collection("users").document(auth.uid!!)
             .update(mapOf("cart" to listOf<GroceryCartItem>()))
     }
+
+    fun addAddress(
+        address: AddressItem,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
+        db.collection("users").document(auth.uid!!)
+            .update("addresses", FieldValue.arrayUnion(address)).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onComplete()
+            } else {
+                onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+    fun removeAddress(
+        address: AddressItem,
+        onComplete: () -> Unit,
+        onFail: (msg: String) -> Unit
+    ) {
+        db.collection("users").document(auth.uid!!)
+            .update("addresses", FieldValue.arrayRemove(address)).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onComplete()
+            } else {
+                onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+
 
     fun search(query: String) {
         currentSearch.value = query
@@ -159,29 +213,8 @@ class MainViewModel : ViewModel() {
             "All" -> {
                 filtered.addAll(originalItems)
             }
-            "Fruit" -> {
-                originalItems.forEach { if (it.categories.contains("fruit")) filtered.add(it) }
-            }
-            "Vegetables" -> {
-                originalItems.forEach { if (it.categories.contains("vegetable")) filtered.add(it) }
-            }
-            "Dairy" -> {
-                originalItems.forEach { if (it.categories.contains("dairy")) filtered.add(it) }
-            }
-            "Meat" -> {
-                originalItems.forEach { if (it.categories.contains("meat")) filtered.add(it) }
-            }
-            "Condiments" -> {
-                originalItems.forEach { if (it.categories.contains("condiment")) filtered.add(it) }
-            }
-            "Snacks" -> {
-                originalItems.forEach { if (it.categories.contains("snack")) filtered.add(it) }
-            }
-            "Grain" -> {
-                originalItems.forEach { if (it.categories.contains("grain")) filtered.add(it) }
-            }
-            "Drinks" -> {
-                originalItems.forEach { if (it.categories.contains("drink")) filtered.add(it) }
+            else -> {
+                originalItems.forEach { if (it.categories.contains(category.lowercase())) filtered.add(it) }
             }
         }
 
@@ -222,8 +255,26 @@ class MainViewModel : ViewModel() {
         db.collection("groceries").add(groceryItem).addOnCompleteListener {
             if (it.isSuccessful) {
                 onComplete()
+                categories.forEach {cat->
+                    addCategory(cat, currentUser.displayName!!)
+                }
             } else {
                 onFail(it.exception?.localizedMessage ?: "Unknown error")
+            }
+        }
+    }
+
+    private fun addCategory(
+        category: String,
+        addedBy: String
+    ) {
+        db.collection("categories").add(Category(category, addedBy))
+    }
+
+    fun getCategories(onComplete: (List<Category>)->Unit) {
+        db.collection("categories").get().addOnCompleteListener {
+            if(it.isSuccessful && it.result != null){
+                onComplete(it.result.toObjects(Category::class.java)!!)
             }
         }
     }

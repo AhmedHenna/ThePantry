@@ -48,6 +48,7 @@ class GroceryItemsAdapter(
         val binding = holder.binding
 
 
+        binding.productIcon.setImageResource(android.R.color.transparent)
         binding.root.setOnClickListener {
             onItemClick(item, binding.productIcon)
         }

@@ -67,6 +67,15 @@
         <action
             android:id="@+id/action_bottomNavigationFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment" />
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_addressAddFragment"
+            app:destination="@id/addressAddFragment" />
     </fragment>
 
     <fragment
@@ -74,5 +83,17 @@
         android:name="com.ahmedhenna.thepantry.fragment.AddProductFragment"
         android:label="AddProductFragment"
         tools:layout="@layout/fragment_add_item"/>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.AddressFragment"
+        android:label="AddressFragment" />
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.OrdersFragment"
+        android:label="OrdersFragment" />
+    <fragment
+        android:id="@+id/addressAddFragment"
+        android:name="com.ahmedhenna.thepantry.fragment.AddressAddFragment"
+        android:label="AddressAddFragment" />
 
 </navigation>

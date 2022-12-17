@@ -6,5 +6,6 @@ data class UserItem(
     val email: String ="",
     val orders: List<OrderItem> = listOf(),
     val cart: List<GroceryCartItem> = listOf(),
-    val doctor: Boolean = false
+    val doctor: Boolean = false,
+    val addresses: List<AddressItem> = listOf()
 )
